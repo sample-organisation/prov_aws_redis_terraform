@@ -4,7 +4,7 @@ resources:
     type: gitRepo
     integration: "drship_github"
     versionTemplate:
-      sourceName: "sample-organisation/prov_aws_memcached_terraform" #TODO change to devops-recipes
+      sourceName: "sample-organisation/prov_aws_redis_terraform" #TODO change to devops-recipes
       branch: master
 
 # AWS credentials
@@ -64,7 +64,7 @@ jobs:
         - popd
     flags:
       - aws_elasticache
-      - memcached
+      - redis
       - aws
       - terraform
 
@@ -101,6 +101,6 @@ jobs:
         - popd
     flags:
       - aws_elasticache
-      - memcached
+      - redis
       - aws
       - terraform
