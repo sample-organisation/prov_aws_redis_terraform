@@ -9,3 +9,7 @@ variable "aws_secret_access_key" {
 variable "aws_region" {
   description = "AWS region"
 }
+
+variable "vpc_public_sn_id" {
+  description = "Subnet ID for spinning up Redis instances"
+}

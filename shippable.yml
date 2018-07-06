@@ -72,6 +72,7 @@ jobs:
   - name: deprov_aws_redis_tf
     type: runSh
     steps:
+      - IN: aws_vpc_tf_info
       - IN: aws_redis_tf_repo
         switch: off
       - IN: aws_redis_tf_state

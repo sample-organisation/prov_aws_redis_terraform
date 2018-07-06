@@ -4,6 +4,11 @@ provider "aws" {
   region      = "${var.aws_region}"
 }
 
+resource "aws_elasticache_subnet_group" "demo_redis_subnet_group" {
+  name       = "demo-redis-subnet-group"
+  subnet_ids = ["${var.vpc_public_sn_id}"]
+}
+
 resource "aws_elasticache_cluster" "redisInstance" {
   cluster_id           = "demo-redis"
   engine               = "redis"
@@ -11,6 +16,7 @@ resource "aws_elasticache_cluster" "redisInstance" {
   num_cache_nodes      = 1
   parameter_group_name = "default.redis4.0"
   port                 = 6379
+  subnet_group_name    = "${aws_elasticache_subnet_group.demo_redis_subnet_group.name}"
 }
 
 output "engine_version" {
