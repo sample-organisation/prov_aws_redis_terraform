@@ -23,6 +23,14 @@ resources:
       params:
         SEED: "initial_version"
 
+templates: &terraform-init
+  - pushd $(shipctl get_resource_state "aws_redis_tf_repo")
+  - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_resource_field aws_redis_tf_creds "accessKey")
+  - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_resource_field aws_redis_tf_creds "secretKey")
+  - shipctl copy_file_from_resource_state aws_redis_tf_state terraform.tfstate .
+  - shipctl replace terraform.tfvars
+  - terraform init
+
 jobs:
 # Provision Amazon ElastiCache Redis with Terraform
   - name: prov_aws_redis_tf
@@ -42,12 +50,7 @@ jobs:
               env:
                 - aws_region: "us-east-1"
           script:
-            - pushd $(shipctl get_resource_state "aws_redis_tf_repo")
-            - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_resource_field aws_redis_tf_creds "accessKey")
-            - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_resource_field aws_redis_tf_creds "secretKey")
-            - shipctl copy_file_from_resource_state aws_redis_tf_state terraform.tfstate .
-            - shipctl replace terraform.tfvars
-            - terraform init
+            - *terraform-init
             - terraform apply -auto-approve -var-file=terraform.tfvars
       - OUT: aws_redis_tf_info
         overwrite: true
@@ -85,12 +88,7 @@ jobs:
               env:
                 - aws_region: "us-east-1"
           script:
-            - pushd $(shipctl get_resource_state "aws_redis_tf_repo")
-            - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_resource_field aws_redis_tf_creds "accessKey")
-            - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_resource_field aws_redis_tf_creds "secretKey")
-            - shipctl copy_file_from_resource_state aws_redis_tf_state terraform.tfstate .
-            - shipctl replace terraform.tfvars
-            - terraform init
+            - *terraform-init
             - terraform destroy -force -auto-approve -var-file=terraform.tfvars
       - OUT: aws_redis_tf_state
     always:
