@@ -13,3 +13,7 @@ variable "aws_region" {
 variable "vpc_public_sn_id" {
   description = "Subnet ID for spinning up Redis instances"
 }
+
+variable "vpc_private_sg_id" {
+  description = "Security group ID for Redis instances"
+}

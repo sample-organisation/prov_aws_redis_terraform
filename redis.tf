@@ -17,6 +17,15 @@ resource "aws_elasticache_cluster" "redisInstance" {
   parameter_group_name = "default.redis4.0"
   port                 = 6379
   subnet_group_name    = "${aws_elasticache_subnet_group.demo_redis_subnet_group.name}"
+  security_group_ids   = ["${var.vpc_private_sg_id}"]
+}
+
+output "subnet_id" {
+  value = "${var.vpc_public_sn_id}"
+}
+
+output "subnet_group_name" {
+  value = "${aws_elasticache_subnet_group.demo_redis_subnet_group.name}"
 }
 
 output "engine_version" {

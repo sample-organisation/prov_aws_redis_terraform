@@ -54,11 +54,8 @@ jobs:
       - OUT: aws_redis_tf_state
     on_success:
       script:
-        - export engine_version=$(terraform output engine_version)
-        - export port=$(terraform output port)
-        - export cache_node_0_address=$(terraform output cache_node_0_address)
-        - export cache_nodes_0_availability_zone=$(terraform output cache_nodes_0_availability_zone)
-        - shipctl put_resource_state_multi aws_redis_tf_info "versionName=$cache_node_0_address" "engine_version=$engine_version" "port=$port" "cache_node_0_address=$cache_node_0_address" "cache_nodes_0_availability_zone=$cache_nodes_0_availability_zone"
+        - shipctl put_resource_state_multi aws_redis_tf_info "engine_version=$(terraform output engine_version)" "port=$(terraform output port)" "cache_node_0_address=$(terraform output cache_node_0_address)" "cache_nodes_0_availability_zone=$(terraform output cache_nodes_0_availability_zone)"
+        - shipctl put_resource_state_multi aws_redis_tf_info "subnet_id=$(terraform output subnet_id)" "subnet_group_name=$(terraform output subnet_group_name)"
     always:
       script:
         - shipctl copy_file_to_resource_state terraform.tfstate aws_redis_tf_state
